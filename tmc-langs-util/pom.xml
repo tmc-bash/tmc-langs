@@ -71,6 +71,12 @@
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>fi.helsinki.cs.tmc</groupId>
+            <artifactId>tmc-langs-bash</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
         <!--<dependency>>
             <groupId>fi.helsinki.cs.tmc</groupId>
             <artifactId>tmc-langs-rust</artifactId>
