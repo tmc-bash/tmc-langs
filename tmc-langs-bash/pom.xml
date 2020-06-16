@@ -7,6 +7,9 @@
         <version>0.7.17-SNAPSHOT</version>
     </parent>
     
+    <artifactId>tmc-langs-bash</artifactId>
+    <packaging>jar</packaging>
+    
     <dependencies>
         <dependency>
             <groupId>fi.helsinki.cs.tmc</groupId>
@@ -15,7 +18,5 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-    
-    <artifactId>tmc-langs-bash</artifactId>
-    <packaging>jar</packaging>
+   
 </project>

@@ -23,11 +23,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class BashPlugin extends AbstractLanguagePlugin {
 
@@ -39,6 +42,7 @@ public class BashPlugin extends AbstractLanguagePlugin {
     private static final String CANNOT_SCAN_EXERCISE_MESSAGE = "Failed to scan exercise.";
     private static final String CANNOT_PARSE_EXERCISE_DESCRIPTION_MESSAGE
             = "Failed to parse exercise description.";
+    private static final String CANNOT_SCAN_PROJECT_TYPE_MESSAGE = "Failed to scan project type";
 
     private static Logger log = LoggerFactory.getLogger(BashPlugin.class);
 
@@ -51,10 +55,29 @@ public class BashPlugin extends AbstractLanguagePlugin {
         );
     }
 
-    /** TODO */
     @Override
     public boolean isExerciseTypeCorrect(Path path) {
+        
+        try (Stream<Path> paths = Files.walk(path.resolve(BASH_FOLDER_PATH), 2)) {
+            
+            if (paths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() == 0) {
+                return false;
+            }
 
+        } catch (Exception ex) {
+            log.error(CANNOT_SCAN_PROJECT_TYPE_MESSAGE, ex);
+        }
+        
+        try (Stream<Path> paths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2)) {
+            
+            if (paths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() == 0) {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            log.error(CANNOT_SCAN_PROJECT_TYPE_MESSAGE, ex);
+        }
+        
         return true;
     }
 
@@ -68,12 +91,10 @@ public class BashPlugin extends AbstractLanguagePlugin {
         return "bash";
     }
 
-    /**
-     * TODO!!!!!!!!!!!!!!
-     */
     @Override
     public Optional<ExerciseDesc> scanExercise(Path path, String exerciseName) {
         ProcessRunner runner = new ProcessRunner(getAvailablePointsCommand(), path);
+        
         try {
             runner.call();
         } catch (Exception e) {
@@ -109,7 +130,7 @@ public class BashPlugin extends AbstractLanguagePlugin {
     }
 
     @Override
-    public ValidationResult checkCodeStyle(Path path, Locale messageLocale) throws UnsupportedOperationException {
+    public ValidationResult checkCodeStyle(Path path, Locale messageLocale) {
         return new ValidationResult() {
             @Override
             public Strategy getStrategy() {
@@ -127,16 +148,12 @@ public class BashPlugin extends AbstractLanguagePlugin {
     public void clean(Path path) {
     }
 
-    /**
-     * TODO!!!!!!!!!!!!!!!!!!
-     */
     private String[] getAvailablePointsCommand() {
-        return null;
-//        return ArrayUtils.add(getTestCommand(), "available_points");
+        return new String[]{"/bin/bash", "-c", "./tmc/available_points.sh"};
     }
 
     private String[] getTestCommand() {
-        return new String[]{"./tmc/runner.sh"};
+        return new String[]{"/bin/bash", "-c", "./tmc/runner.sh"};
     }
 
 }
