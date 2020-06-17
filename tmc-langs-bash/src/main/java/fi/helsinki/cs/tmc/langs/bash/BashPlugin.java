@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class BashPlugin extends AbstractLanguagePlugin {
-
+  
     private static final Path BASH_FOLDER_PATH = Paths.get("src");
     private static final Path TEST_FOLDER_PATH = Paths.get("test");
 
@@ -58,27 +58,21 @@ public class BashPlugin extends AbstractLanguagePlugin {
     @Override
     public boolean isExerciseTypeCorrect(Path path) {
         
-        try (Stream<Path> paths = Files.walk(path.resolve(BASH_FOLDER_PATH), 2)) {
+        try {
+            Stream<Path> folderPaths = Files.walk(path.resolve(BASH_FOLDER_PATH), 2);
+            Stream<Path> testPaths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2);
             
-            if (paths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() == 0) {
-                return false;
+            if (folderPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0
+                    && testPaths.map(p -> p.toString())
+                            .filter(f -> f.endsWith(".sh")).count() != 0) {
+                return true;
             }
 
         } catch (Exception ex) {
             log.error(CANNOT_SCAN_PROJECT_TYPE_MESSAGE, ex);
         }
         
-        try (Stream<Path> paths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2)) {
-            
-            if (paths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() == 0) {
-                return false;
-            }
-
-        } catch (Exception ex) {
-            log.error(CANNOT_SCAN_PROJECT_TYPE_MESSAGE, ex);
-        }
-        
-        return true;
+        return false;
     }
 
     @Override
