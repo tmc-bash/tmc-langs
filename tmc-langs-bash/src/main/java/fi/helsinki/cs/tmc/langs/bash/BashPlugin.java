@@ -33,45 +33,39 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class BashPlugin extends AbstractLanguagePlugin {
-  
+
     private static final Path BASH_FOLDER_PATH = Paths.get("src");
     private static final Path TEST_FOLDER_PATH = Paths.get("test");
 
     private static final String CANNOT_RUN_TESTS_MESSAGE = "Failed to run tests.";
     private static final String CANNOT_PARSE_TEST_RESULTS_MESSAGE = "Failed to read test results.";
     private static final String CANNOT_SCAN_EXERCISE_MESSAGE = "Failed to scan exercise.";
-    private static final String CANNOT_PARSE_EXERCISE_DESCRIPTION_MESSAGE
-            = "Failed to parse exercise description.";
+    private static final String CANNOT_PARSE_EXERCISE_DESCRIPTION_MESSAGE = "Failed to parse exercise description.";
     private static final String CANNOT_SCAN_PROJECT_TYPE_MESSAGE = "Failed to scan project type";
 
     private static Logger log = LoggerFactory.getLogger(BashPlugin.class);
 
     public BashPlugin() {
-        super(
-                new ExerciseBuilder(),
-                new StudentFileAwareSubmissionProcessor(),
-                new StudentFileAwareZipper(),
-                new StudentFileAwareUnzipper()
-        );
+        super(new ExerciseBuilder(), new StudentFileAwareSubmissionProcessor(), new StudentFileAwareZipper(),
+                new StudentFileAwareUnzipper());
     }
 
     @Override
     public boolean isExerciseTypeCorrect(Path path) {
-        
+
         try {
             Stream<Path> folderPaths = Files.walk(path.resolve(BASH_FOLDER_PATH), 2);
             Stream<Path> testPaths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2);
-            
+
             if (folderPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0
-                    && testPaths.map(p -> p.toString())
-                            .filter(f -> f.endsWith(".sh")).count() != 0) {
+                    && testPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0) {
                 return true;
             }
 
         } catch (Exception ex) {
             log.error(CANNOT_SCAN_PROJECT_TYPE_MESSAGE, ex);
         }
-        
+
         return false;
     }
 
@@ -88,7 +82,7 @@ public class BashPlugin extends AbstractLanguagePlugin {
     @Override
     public Optional<ExerciseDesc> scanExercise(Path path, String exerciseName) {
         ProcessRunner runner = new ProcessRunner(getAvailablePointsCommand(), path);
-        
+
         try {
             runner.call();
         } catch (Exception e) {
@@ -142,12 +136,26 @@ public class BashPlugin extends AbstractLanguagePlugin {
     public void clean(Path path) {
     }
 
+    private boolean isOsWindows() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return (os.indexOf("win") >= 0);
+    }
+
     private String[] getAvailablePointsCommand() {
-        return new String[]{"/bin/bash", "-c", "./tmc/available_points.sh"};
+        if (isOsWindows()) {
+            String powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+            return new String[] { powershellPath, "bash ./tmc/available_points.sh" };
+        } else {
+            return new String[] { "/bin/bash", "-c", "./tmc/available_points.sh" };
+        }
     }
 
     private String[] getTestCommand() {
-        return new String[]{"/bin/bash", "-c", "./tmc/runner.sh"};
+        if (isOsWindows()) {
+            String powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+            return new String[] { powershellPath, "bash ./tmc/runner.sh" };
+        } else {
+            return new String[] { "/bin/bash", "-c", "./tmc/runner.sh" };
+        }
     }
-
 }
