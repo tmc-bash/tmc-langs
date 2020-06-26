@@ -40,17 +40,18 @@ public class BashPluginTest {
         assertEquals("bash", this.bashPlugin.getPluginName());
     }
 
-    //@Test
+    @Test
     public void testBashIsRecognizedAsBash() {
-        // TODO
-        // Possibly a C# specific test that is not needed in Bash.
+        Path bashProjePath = TestUtils.getPath(getClass(), "PassingProject");
 
+        assertTrue(bashPlugin.isExerciseTypeCorrect(bashProjePath));
     }
 
-    //@Test
+    @Test
     public void testPythonIsNotRecognizedAsBash() {
-        // TODO
-        // Possibly a C# specific test that is not needed in Bash.
+        Path pythonProjectPath = TestUtils.getPath(getClass(), "PythonProject");
+
+        assertFalse(bashPlugin.isExerciseTypeCorrect(pythonProjectPath));
     }
 
     //@Test
