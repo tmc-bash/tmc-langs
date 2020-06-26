@@ -26,14 +26,18 @@ import java.util.Locale;
 
 public class BashPluginTest {
 
-    //@Before
+    private BashPlugin bashPlugin;
+
+    @Before
     public void setUp() {
-        // TODO
+        this.bashPlugin = new BashPlugin();
+
+        System.setProperty("TEST_ENV", "TEST");
     }
 
-    //@Test
+    @Test
     public void testGetLanguageName() {
-        // TODO
+        assertEquals("bash", this.bashPlugin.getPluginName());
     }
 
     //@Test
