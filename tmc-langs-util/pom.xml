@@ -4,7 +4,7 @@
     <parent>
         <groupId>fi.helsinki.cs.tmc</groupId>
         <artifactId>tmc-langs</artifactId>
-        <version>0.7.17-SNAPSHOT</version>
+        <version>0.8.4-SNAPSHOT</version>
     </parent>
     <artifactId>tmc-langs-util</artifactId>
     <packaging>jar</packaging>
@@ -62,6 +62,12 @@
         <dependency>
             <groupId>fi.helsinki.cs.tmc</groupId>
             <artifactId>tmc-langs-python3</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>fi.helsinki.cs.tmc</groupId>
+            <artifactId>tmc-langs-csharp</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

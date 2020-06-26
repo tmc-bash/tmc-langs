@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.langs.util;
 import fi.helsinki.cs.tmc.langs.LanguagePlugin;
 import fi.helsinki.cs.tmc.langs.NoTestsPlugin;
 import fi.helsinki.cs.tmc.langs.bash.BashPlugin;
+import fi.helsinki.cs.tmc.langs.csharp.CSharpPlugin;
 import fi.helsinki.cs.tmc.langs.domain.NoLanguagePluginFoundException;
 import fi.helsinki.cs.tmc.langs.java.ant.AntPlugin;
 import fi.helsinki.cs.tmc.langs.java.maven.MavenPlugin;
@@ -26,6 +27,7 @@ public enum ProjectType {
     PYTHON3(new Python3Plugin()),
     R(new RPlugin()),
     BASH(new BashPlugin()),
+    CSHARP(new CSharpPlugin()),
     JAVA_MAVEN(new MavenPlugin()),
     // for legacy and matching reasons keep the java ant as the last choise.
     JAVA_ANT(new AntPlugin());
