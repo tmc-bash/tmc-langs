@@ -40,13 +40,17 @@ public class BashPlugin extends AbstractLanguagePlugin {
     private static final String CANNOT_RUN_TESTS_MESSAGE = "Failed to run tests.";
     private static final String CANNOT_PARSE_TEST_RESULTS_MESSAGE = "Failed to read test results.";
     private static final String CANNOT_SCAN_EXERCISE_MESSAGE = "Failed to scan exercise.";
-    private static final String CANNOT_PARSE_EXERCISE_DESCRIPTION_MESSAGE = "Failed to parse exercise description.";
+    private static final String CANNOT_PARSE_EXERCISE_DESCRIPTION_MESSAGE 
+            = "Failed to parse exercise description.";
     private static final String CANNOT_SCAN_PROJECT_TYPE_MESSAGE = "Failed to scan project type";
 
     private static Logger log = LoggerFactory.getLogger(BashPlugin.class);
 
     public BashPlugin() {
-        super(new ExerciseBuilder(), new StudentFileAwareSubmissionProcessor(), new StudentFileAwareZipper(),
+        super(
+                new ExerciseBuilder(), 
+                new StudentFileAwareSubmissionProcessor(), 
+                new StudentFileAwareZipper(),
                 new StudentFileAwareUnzipper());
     }
 
@@ -58,7 +62,8 @@ public class BashPlugin extends AbstractLanguagePlugin {
             Stream<Path> testPaths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2);
 
             if (folderPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0
-                    && testPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0) {
+                    && testPaths.map(p -> p.toString()).filter(
+                            f -> f.endsWith(".bats")).count() != 0) {
                 return true;
             }
 
@@ -143,7 +148,8 @@ public class BashPlugin extends AbstractLanguagePlugin {
 
     private String[] getAvailablePointsCommand() {
         if (isOsWindows()) {
-            String powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+            String powershellPath = 
+                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
             return new String[] { powershellPath, "bash ./tmc/available_points.sh" };
         } else {
             return new String[] { "/bin/bash", "-c", "./tmc/available_points.sh" };
@@ -152,7 +158,8 @@ public class BashPlugin extends AbstractLanguagePlugin {
 
     private String[] getTestCommand() {
         if (isOsWindows()) {
-            String powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+            String powershellPath = 
+                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
             return new String[] { powershellPath, "bash ./tmc/runner.sh" };
         } else {
             return new String[] { "/bin/bash", "-c", "./tmc/runner.sh" };
