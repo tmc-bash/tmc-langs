@@ -61,10 +61,11 @@ public class BashPlugin extends AbstractLanguagePlugin {
             Stream<Path> folderPaths = Files.walk(path.resolve(BASH_FOLDER_PATH), 2);
             Stream<Path> testPaths = Files.walk(path.resolve(TEST_FOLDER_PATH), 2);
 
-            if (folderPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0
-                    && testPaths.map(p -> p.toString()).filter(
-                            f -> f.endsWith(".bats")).count() != 0) {
-                return true;
+            if (folderPaths.map(p -> p.toString()).filter(f -> f.endsWith(".sh")).count() != 0) {
+                if (testPaths.map(p -> p.toString()).filter(
+                        f -> f.endsWith(".bats") || f.endsWith(".sh")).count() != 0) {
+                    return true;
+                }
             }
 
         } catch (Exception ex) {
